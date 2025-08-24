@@ -1,100 +1,47 @@
-// import { createUserWithEmailAndPassword } from "firebase/auth";
-// import { useState } from "react";
-// import { Button, StyleSheet, Text, TextInput, View } from "react-native";
-// import { auth } from "../../firebase";
-
-// export default function RegisterScreen({ navigation }) {
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-
-//   const handleRegister = async () => {
-//     try {
-//       await createUserWithEmailAndPassword(auth, email, password);
-//       alert("Registration successful!");
-//       navigation.navigate("Login");
-//     } catch (error) {
-//       alert(error.message);
-//     }
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.title}>Register</Text>
-//       <TextInput
-//         placeholder="Email"
-//         value={email}
-//         onChangeText={setEmail}
-//         style={styles.input}
-//       />
-//       <TextInput
-//         placeholder="Password"
-//         secureTextEntry
-//         value={password}
-//         onChangeText={setPassword}
-//         style={styles.input}
-//       />
-//       <Button title="Register" onPress={handleRegister} />
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: { flex: 1, justifyContent: "center", padding: 20 },
-//   title: { fontSize: 24, fontWeight: "bold", marginBottom: 20 },
-//   input: {
-//     borderWidth: 1,
-//     borderColor: "#ccc",
-//     padding: 10,
-//     marginBottom: 15,
-//     borderRadius: 8,
-//   },
-// });// src/screens/RegistrationScreen.jsimport React, { useState } from "react";
-import Checkbox from "expo-checkbox";
+import React, { useState } from 'react';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { AntDesign, FontAwesome, Entypo } from '@expo/vector-icons';
+import Checkbox from "expo-checkbox"; 
+import { useNavigation } from '@react-navigation/native';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import { useState } from "react";
-import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
-import { auth, db } from "../../firebase"; // ✅ make sure firebase.js is set up
+import { auth, db } from "../../firebase"; 
 
-export default function RegisterScreen({ navigation }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [agree, setAgree] = useState(false);
+const RegistrationScreen = () => {
+  const navigation = useNavigation();
+
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [agreeTerms, setAgreeTerms] = useState(false);
+  const [receiveNotifications, setReceiveNotifications] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleRegister = async () => {
-    if (!email || !password) {
-      Alert.alert("Error", "Please fill in all fields");
-      return;
-    }
-
-    if (!agree) {
-      Alert.alert("Error", "You must agree to the Terms & Conditions");
+  const handleSignUp = async () => {
+    if (!firstName || !lastName || !email || !password || !agreeTerms) {
+      Alert.alert('Error', 'Please fill all required fields and agree to the terms.');
       return;
     }
 
     try {
       setLoading(true);
 
-      // ✅ Create user with Firebase Authentication
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // ✅ Save user info to Firestore
       await setDoc(doc(db, "users", user.uid), {
+        firstName,
+        lastName,
         email: user.email,
+        receiveNotifications,
         createdAt: new Date(),
       });
 
-      Alert.alert("Success", "Account created successfully!");
+      Alert.alert("Success", "Registered successfully!");
 
-      // ✅ Navigate back to Login
-      navigation.navigate("Login");
+   
+      navigation.replace("Main");
     } catch (error) {
       console.error(error);
       Alert.alert("Registration Error", error.message);
@@ -105,57 +52,127 @@ export default function RegisterScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Register</Text>
+      <Text style={styles.header}>Register</Text>
 
+      <TextInput
+        style={styles.input}
+        placeholder="First Name"
+        placeholderTextColor="#888"
+        value={firstName}
+        onChangeText={setFirstName}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Last Name"
+        placeholderTextColor="#888"
+        value={lastName}
+        onChangeText={setLastName}
+      />
       <TextInput
         style={styles.input}
         placeholder="Email"
+        placeholderTextColor="#888"
         value={email}
         onChangeText={setEmail}
-        autoCapitalize="none"
         keyboardType="email-address"
+        autoCapitalize="none"
       />
-
       <TextInput
         style={styles.input}
         placeholder="Password"
+        placeholderTextColor="#888"
         value={password}
-        onChangeText={setPassword}
         secureTextEntry
+        onChangeText={setPassword}
       />
 
       {/* Terms & Conditions Checkbox */}
       <View style={styles.checkboxContainer}>
-        <Checkbox value={agree} onValueChange={setAgree} color={agree ? "#007AFF" : undefined} />
-        <Text style={styles.checkboxText}>I agree to the Terms & Conditions</Text>
+        <Checkbox value={agreeTerms} onValueChange={setAgreeTerms} color={agreeTerms ? "#f4a261" : undefined} />
+        <Text style={styles.label}>I agree to the terms and conditions *</Text>
       </View>
 
-      <Button
-        title={loading ? "Registering..." : "Register"}
-        onPress={handleRegister}
-        disabled={loading}
-      />
+      <View style={styles.checkboxContainer}>
+        <Checkbox value={receiveNotifications} onValueChange={setReceiveNotifications} color={receiveNotifications ? "#f4a261" : undefined} />
+        <Text style={styles.label}>Would you like to receive notifications</Text>
+      </View>
 
-      <Text style={{ marginTop: 20 }}>
-        Already have an account?{" "}
-        <Text style={{ color: "blue" }} onPress={() => navigation.navigate("Login")}>
-          Login
+      <TouchableOpacity style={styles.button} onPress={handleSignUp} disabled={loading}>
+        <Text style={styles.buttonText}>
+          {loading ? "Registering..." : "Sign up"}
         </Text>
-      </Text>
+      </TouchableOpacity>
+
+      <View style={styles.divider}>
+        <Text style={styles.orText}>or sign with</Text>
+      </View>
+
+      <View style={styles.socialIcons}>
+        <TouchableOpacity>
+          <FontAwesome name="facebook-square" size={32} color="#3b5998" />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <AntDesign name="google" size={32} color="#db4a39" />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Entypo name="twitter" size={32} color="#1DA1F2" />
+        </TouchableOpacity>
+      </View>
     </View>
   );
-}
+};
+
+export default RegistrationScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", padding: 20 },
-  title: { fontSize: 24, fontWeight: "bold", marginBottom: 20, textAlign: "center" },
+  container: {
+    flex: 1,
+    padding: 24,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+  },
+  header: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 30,
+    alignSelf: 'center',
+  },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    marginVertical: 10,
-    borderRadius: 8,
+    borderColor: '#d8d0d0ff',
+    borderRadius: 6,
+    padding: 12,
+    marginBottom: 10,
   },
-  checkboxContainer: { flexDirection: "row", alignItems: "center", marginVertical: 15 },
-  checkboxText: { marginLeft: 8 },
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  label: {
+    marginLeft: 8,
+  },
+  button: {
+    backgroundColor: '#f4a261',
+    padding: 15,
+    borderRadius: 6,
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  divider: {
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  orText: {
+    color: '#232121ff',
+  },
+  socialIcons: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 10,
+  },
 });
