@@ -1,64 +1,103 @@
-// import React from "react";
-// import { View, Text, Button, StyleSheet } from "react-native";
 
-// export default function PaymentScreen({ navigation }) {
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.title}>Payment</Text>
-//       <Text style={styles.text}>Proceed to pay for your order.</Text>
+import { useState } from "react";
+import Cards from "react-credit-cards-2";
+import "react-credit-cards-2/dist/es/styles-compiled.css";
 
-//       <Button
-//         title="Complete Payment"
-//         onPress={() => alert("Payment Successful!")}
-//       />
-//       <Button title="Back to Orders" onPress={() => navigation.goBack()} color="gray" />
-//     </View>
-//   );
-// }
+export default function PaymentPage() {
+  const [cardData, setCardData] = useState({
+    number: "",
+    name: "",
+    expiry: "",
+    cvc: "",
+    focus: ""
+  });
 
-// const styles = StyleSheet.create({
-//   container: { flex: 1, justifyContent: "center", alignItems: "center", padding: 20 },
-//   title: { fontSize: 24, fontWeight: "bold", marginBottom: 20 },
-//   text: { fontSize: 18, marginBottom: 20 },
-// });
-// import { addDoc, collection, Timestamp } from "firebase/firestore";
-// import { Button, StyleSheet, Text, View } from "react-native";
-// import { db } from "../../firebase";
+  const handleInputChange = (e) => {
+    setCardData({ ...cardData, [e.target.name]: e.target.value });
+  };
 
-// export default function PaymentScreen({ route, navigation }) {
-//   const cartItems = route.params?.cartItems || [];
-//   const total = cartItems.reduce((sum, item) => sum + item.price, 0);
+  const handleInputFocus = (e) => {
+    setCardData({ ...cardData, focus: e.target.name });
+  };
 
-//   const handlePayment = async () => {
-//     try {
-//       // Save order to Firestore
-//       await addDoc(collection(db, "orders"), {
-//         items: cartItems,
-//         total,
-//         status: "pending",
-//         createdAt: Timestamp.now(),
-//       });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert("Payment Submitted ✅");
+  };
 
-//       alert("Order placed successfully!");
-//       navigation.navigate("Orders"); // go to Orders screen
-//     } catch (error) {
-//       alert("Error saving order: " + error.message);
-//     }
-//   };
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-white">
+      {}
+      <Cards
+        number={cardData.number}
+        name={cardData.name}
+        expiry={cardData.expiry}
+        cvc={cardData.cvc}
+        focused={cardData.focus}
+      />
 
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.title}>Payment</Text>
-//       <Text>Total: R{total}</Text>
-//       <Button title="Confirm Payment & Place Order" onPress={handlePayment} />
-//     </View>
-//   );
-// }
+      {}
+      <form onSubmit={handleSubmit} className="mt-6 w-80 space-y-4">
+        <input
+          type="text"
+          name="name"
+          placeholder="Card Holder Name"
+          value={cardData.name}
+          onChange={handleInputChange}
+          onFocus={handleInputFocus}
+          className="border p-2 rounded w-full"
+        />
 
-// const styles = StyleSheet.create({
-//   container: { flex: 1, padding: 20, justifyContent: "center" },
-//   title: { fontSize: 24, fontWeight: "bold", marginBottom: 20 },
-// });
+        <input
+          type="tel"
+          name="number"
+          placeholder="Card Number"
+          value={cardData.number}
+          onChange={handleInputChange}
+          onFocus={handleInputFocus}
+          className="border p-2 rounded w-full"
+        />
+
+        <input
+          type="tel"
+          name="expiry"
+          placeholder="MM/YY"
+          value={cardData.expiry}
+          onChange={handleInputChange}
+          onFocus={handleInputFocus}
+          className="border p-2 rounded w-full"
+        />
+
+        <input
+          type="tel"
+          name="cvc"
+          placeholder="CVV"
+          value={cardData.cvc}
+          onChange={handleInputChange}
+          onFocus={handleInputFocus}
+          className="border p-2 rounded w-full"
+        />
+
+        {}
+        <div className="flex justify-between mt-2">
+          <img src="https://img.icons8.com/color/48/000000/visa.png" alt="Visa" />
+          <img src="https://img.icons8.com/color/48/000000/mastercard.png" alt="Mastercard" />
+          <img src="https://img.icons8.com/color/48/000000/paypal.png" alt="PayPal" />
+        </div>
+
+        <button
+          type="submit"
+          className="bg-blue-600 text-white p-2 rounded w-full mt-4 hover:bg-blue-700"
+        >
+          Pay Now
+        </button>
+      </form>
+    </div>
+  );
+}
+
+
+
 import { addDoc, collection, Timestamp } from "firebase/firestore";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { db } from "../../firebase";
