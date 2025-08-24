@@ -169,7 +169,8 @@ export default function App() {
           component={DrawerNavigator}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="Payment" component={PaymentScreen} />
+        <Stack.Screen name="Payment" component={PaymentScreen}
+        options={{headearShown: false}} />
       </Stack.Navigator>
     </NavigationContainer>
   );
