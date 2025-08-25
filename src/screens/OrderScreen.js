@@ -1,3 +1,4 @@
+// screens/OrderScreen.js
 import React, { useState } from "react";
 import {
   View,
@@ -8,14 +9,14 @@ import {
   FlatList,
   TextInput,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons"; // Changed from Ionicons to MaterialIcons
 
 const categories = [
   { id: "1", title: "Burgers", image: require("../../assets/images/burger.png") },
   { id: "2", title: "Drinks", image: require("../../assets/images/drink.png") },
   { id: "3", title: "Main meals", image: require("../../assets/images/mainmeal.png") },
   { id: "4", title: "Fish & chips", image: require("../../assets/images/fishchips.png") },
-  { id: "5", title: "Sandwich", image: require("../../assets/images/sandwich.png") },
+  { id: "5", title: "Sandwiches", image: require("../../assets/images/sandwich.png") },
 ];
 
 const meals = [
@@ -53,15 +54,36 @@ const meals = [
   { id: "mm3", title: "Mogodu and Pap", price: 40, category: "Main meals", image: require("../../assets/images/mogodu-pap.png") },
 ];
 
-export default function OrderScreen() {
+export default function OrderScreen({ route, navigation }) {
+  const [cartItems, setCartItems] = useState([]);
   const [quantities, setQuantities] = useState({});
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const { category } = route.params || {};
+
+  React.useEffect(() => {
+    if (category) {
+      setSelectedCategory(category);
+    }
+  }, [category]);
 
   const updateQuantity = (id, change) => {
     setQuantities((prev) => {
       const newQty = (prev[id] || 1) + change;
       return { ...prev, [id]: newQty > 0 ? newQty : 1 };
     });
+  };
+
+  const addToCart = (item) => {
+    const quantity = quantities[item.id] || 1;
+    const itemWithQty = { ...item, quantity };
+    setCartItems((prev) => [...prev, itemWithQty]);
+    alert(`${item.title} (x${quantity}) added to cart!`);
+  };
+
+  const goToCart = () => {
+    navigation.navigate("Cart", { cartItems: [...cartItems] });
   };
 
   const renderMeal = ({ item }) => (
@@ -79,21 +101,38 @@ export default function OrderScreen() {
             <Text style={styles.qtyBtn}>+</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.addButton}>
+        <TouchableOpacity style={styles.addButton} onPress={() => addToCart(item)}>
           <Text style={styles.addText}>Add to cart</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 
+  // Filter meals based on selected category AND search query
+  const filteredMeals = meals
+    .filter((m) => {
+      const matchesCategory = selectedCategory
+        ? m.category === selectedCategory
+        : !["Burgers", "Drinks", "Main meals"].includes(m.category);
+      const matchesSearch = m.title.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.headerRow}>
-        <Ionicons name="menu" size={28} />
-        <View style={styles.searchBar}>
-          <Ionicons name="search" size={18} color="#555" />
-          <TextInput placeholder="Search" style={{ flex: 1, marginLeft: 5 }} />
+      {/* Header with Search Bar Only */}
+      <View style={styles.header}>
+        {/* Search Bar (Same as MenuScreen) */}
+        <View style={styles.searchContainer}>
+          <MaterialIcons name="search" size={20} color="#888" style={styles.searchIcon} />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search"
+            placeholderTextColor="#888"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            autoCapitalize="none"
+          />
         </View>
       </View>
 
@@ -120,16 +159,7 @@ export default function OrderScreen() {
 
         {/* Meals */}
         <FlatList
-          data={
-            selectedCategory
-              ? meals.filter((m) => m.category === selectedCategory) // Show selected category
-              : meals.filter(
-                  (m) =>
-                    m.category !== "Burgers" &&
-                    m.category !== "Drinks" &&
-                    m.category !== "Main meals"
-                ) // Hide Burgers, Drinks & Main Meals by default
-          }
+          data={filteredMeals}
           renderItem={renderMeal}
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ paddingBottom: 80 }}
@@ -137,7 +167,7 @@ export default function OrderScreen() {
       </View>
 
       {/* Next button */}
-      <TouchableOpacity style={styles.nextButton}>
+      <TouchableOpacity style={styles.nextButton} onPress={goToCart}>
         <Text style={{ color: "#fff", fontWeight: "bold" }}>Next</Text>
       </TouchableOpacity>
     </View>
@@ -145,58 +175,121 @@ export default function OrderScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f5f0e6", padding: 10 },
-  headerRow: { flexDirection: "row", alignItems: "center", marginBottom: 10 },
-  searchBar: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 20,
-    paddingHorizontal: 8,
-    marginLeft: 10,
+  container: {
     flex: 1,
+    backgroundColor: "#f5f0e6",
+    paddingHorizontal: 6,
+    paddingTop: 40,
   },
-  title: { fontSize: 18, fontWeight: "bold", marginVertical: 10, textAlign: "center" },
-  categories: { width: 100, borderRightWidth: 1, borderColor: "#ccc" },
-  categoryItem: { alignItems: "center", marginBottom: 20, padding: 5 },
-  selectedCategory: { backgroundColor: "#f4a261", borderRadius: 8 },
-  categoryImage: { width: 60, height: 60, borderRadius: 30 },
-  categoryText: { marginTop: 5, fontSize: 12, textAlign: "center" },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
+    width: '100%',
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    flex: 1,
+    marginLeft: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  searchIcon: {
+    marginRight: 8,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 14,
+    color: '#000',
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginVertical: 10,
+  },
+  categories: {
+    width: 100,
+    borderRightWidth: 1,
+    borderColor: '#ccc',
+  },
+  categoryItem: {
+    alignItems: 'center',
+    marginBottom: 20,
+    padding: 5,
+  },
+  selectedCategory: {
+    backgroundColor: '#d4a056',
+    borderRadius: 8,
+  },
+  categoryImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+  },
+  categoryText: {
+    fontSize: 12,
+    textAlign: 'center',
+    marginTop: 5,
+  },
   mealCard: {
-    flexDirection: "row",
-    backgroundColor: "#fff",
+    flexDirection: 'row',
+    backgroundColor: '#fff',
     borderRadius: 10,
     padding: 10,
     marginBottom: 10,
     marginHorizontal: 8,
     elevation: 2,
   },
-  mealImage: { width: 70, height: 70, borderRadius: 8, marginRight: 10 },
-  mealTitle: { fontWeight: "bold", marginBottom: 5 },
-  quantityRow: { flexDirection: "row", alignItems: "center", marginVertical: 5 },
+  mealImage: {
+    width: 70,
+    height: 70,
+    borderRadius: 8,
+    marginRight: 10,
+  },
+  mealTitle: {
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  quantityRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 5,
+  },
   qtyBtn: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: '#ccc',
     borderRadius: 4,
     paddingHorizontal: 6,
     paddingVertical: 2,
     fontSize: 16,
   },
   addButton: {
-    backgroundColor: "#f4a261",
+    backgroundColor: '#d4a056',
     padding: 6,
     borderRadius: 6,
-    alignSelf: "flex-start",
+    alignSelf: 'flex-start',
     marginTop: 4,
   },
-  addText: { color: "#fff", fontWeight: "bold" },
+  addText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
   nextButton: {
-    backgroundColor: "#444",
+    backgroundColor: '#444',
     padding: 12,
     borderRadius: 8,
-    alignItems: "center",
-    position: "absolute",
+    alignItems: 'center',
+    position: 'absolute',
     bottom: 20,
     left: 20,
     right: 20,
