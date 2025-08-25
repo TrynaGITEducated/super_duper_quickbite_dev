@@ -1,8 +1,6 @@
 import { addDoc, collection, Timestamp } from "firebase/firestore";
 import { useState } from "react";
-import Cards from "react-credit-cards-2";
-import "react-credit-cards-2/dist/es/styles-compiled.css";
-import { Button, ScrollView, StyleSheet, View } from "react-native";
+import { Button, Image, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { db } from "../../firebase";
 
 export default function PaymentScreen({ route, navigation }) {
@@ -14,11 +12,9 @@ export default function PaymentScreen({ route, navigation }) {
     name: "",
     expiry: "",
     cvc: "",
-    focus: ""
   });
 
   const handleInputChange = (name, value) => setCard({ ...card, [name]: value });
-  const handleInputFocus = (name) => setCard({ ...card, focus: name });
 
   const handlePayment = async () => {
     try {
@@ -37,64 +33,73 @@ export default function PaymentScreen({ route, navigation }) {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Cards
-        number={card.number}
-        name={card.name}
-        expiry={card.expiry}
-        cvc={card.cvc}
-        focused={card.focus}
-        style={{ backgroundColor: "#ADD8E6" }} // light blue
+      <Text style={styles.title}>Enter Card Details</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Card Number (16 digits)"
+        keyboardType="numeric"
+        value={card.number}
+        onChangeText={(text) => handleInputChange("number", text)}
       />
 
-      <View style={styles.form}>
-        <input
-          type="text"
-          name="number"
-          placeholder="Card Number (13 digits)"
-          value={card.number}
-          onChange={(e) => handleInputChange("number", e.target.value)}
-          onFocus={() => handleInputFocus("number")}
-        />
-        <input
-          type="text"
-          name="name"
-          placeholder="Card Holder Name"
-          value={card.name}
-          onChange={(e) => handleInputChange("name", e.target.value)}
-          onFocus={() => handleInputFocus("name")}
-        />
-        <input
-          type="text"
-          name="expiry"
-          placeholder="MM/YY"
-          value={card.expiry}
-          onChange={(e) => handleInputChange("expiry", e.target.value)}
-          onFocus={() => handleInputFocus("expiry")}
-        />
-        <input
-          type="text"
-          name="cvc"
-          placeholder="CVC"
-          value={card.cvc}
-          onChange={(e) => handleInputChange("cvc", e.target.value)}
-          onFocus={() => handleInputFocus("cvc")}
-        />
+      <TextInput
+        style={styles.input}
+        placeholder="Card Holder Name"
+        value={card.name}
+        onChangeText={(text) => handleInputChange("name", text)}
+      />
 
-        {/* Logos */}
-        <div style={{ flexDirection: "row", justifyContent: "space-around", marginTop: 10 }}>
-          <img src="https://img.icons8.com/color/48/000000/visa.png" alt="Visa" />
-          <img src="https://img.icons8.com/color/48/000000/mastercard.png" alt="Mastercard" />
-          <img src="https://img.icons8.com/color/48/000000/paypal.png" alt="PayPal" />
-          
-        </div>
+      <TextInput
+        style={styles.input}
+        placeholder="MM/YY"
+        value={card.expiry}
+        onChangeText={(text) => handleInputChange("expiry", text)}
+      />
 
-        <Button title={`Pay R${total}`} onPress={handlePayment} />
+      <TextInput
+        style={styles.input}
+        placeholder="CVC"
+        secureTextEntry
+        keyboardType="numeric"
+        value={card.cvc}
+        onChangeText={(text) => handleInputChange("cvc", text)}
+      />
+
+      {/* Logos */}
+      <View style={styles.logoRow}>
+        <Image style={styles.logo} source={{ uri: "https://img.icons8.com/color/48/000000/visa.png" }} />
+        <Image style={styles.logo} source={{ uri: "https://img.icons8.com/color/48/000000/mastercard.png" }} />
+        <Image style={styles.logo} source={{ uri: "https://img.icons8.com/color/48/000000/paypal.png" }} />
       </View>
+
+      <Button title={`Pay R${total}`} onPress={handlePayment} />
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flexGrow: 1, padding: 20, backgroundColor: "#f8f8f8", alignItems: "center" },
-  form: { width: "100%", marginTop: 20 },
+  container: {
+    flexGrow: 1,
+    padding: 20,
+    backgroundColor: "#f8f8f8",
+    alignItems: "center",
+  },
+  title: { fontSize: 18, fontWeight: "bold", marginBottom: 20 },
+  input: {
+    width: "100%",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 10,
+    marginBottom: 15,
+    borderRadius: 8,
+    backgroundColor: "#fff",
+  },
+  logoRow: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
+    marginBottom: 20,
+  },
+  logo: { width: 50, height: 30, resizeMode: "contain" },
 });

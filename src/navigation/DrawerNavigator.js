@@ -43,8 +43,8 @@ const Drawer = createDrawerNavigator();
 
 export default function DrawerNavigation() {
   return (
-    <Drawer.Navigator initialRouteName="Main">
-      <Drawer.Screen name="Main" component={TabNavigator} options={{ title: "Home" }} />
+    <Drawer.Navigator initialRouteName="MainTabs">
+      <Drawer.Screen name="MainTabs" component={TabNavigator} options={{ title: "Home" }} />
       <Drawer.Screen name="Profile" component={ProfileScreen} />
       <Drawer.Screen name="Settings" component={SettingsScreen} />
       <Drawer.Screen name="Rating" component={RatingsScreen} />

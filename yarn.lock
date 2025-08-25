@@ -3212,6 +3212,11 @@ cosmiconfig@^5.0.5:
     js-yaml "^3.13.1"
     parse-json "^4.0.0"
 
+credit-card-type@^9.1.0:
+  version "9.1.0"
+  resolved "https://registry.npmjs.org/credit-card-type/-/credit-card-type-9.1.0.tgz#54dd96c93b6579623e9c8656e6798fc2b93f5f05"
+  integrity sha512-CpNFuLxiPFxuZqhSKml3M+t0K/484pMAnfYWH14JoD7OZMnmC0Lmo+P7JX9SobqFpRoo7ifA18kOHdxJywYPEA==
+
 cross-fetch@^3.1.5:
   version "3.2.0"
   resolved "https://registry.npmjs.org/cross-fetch/-/cross-fetch-3.2.0.tgz"
@@ -5174,6 +5179,11 @@ lru-cache@^5.1.1:
   dependencies:
     yallist "^3.0.2"
 
+luhn@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.npmjs.org/luhn/-/luhn-2.4.1.tgz#9cf501c5d0e9f7ee79504338ae71c9bcc67c304a"
+  integrity sha512-p1eEWSb2RJAfv+BzrPEUqbUXV1H3ylHEAOk9yDM1L12ojD6OQQGrE29DqKLa0XYluJTIwXIOFmyzVOme3QSyww==
+
 makeerror@1.0.12:
   version "1.0.12"
   resolved "https://registry.npmjs.org/makeerror/-/makeerror-1.0.12.tgz"
@@ -5820,6 +5830,14 @@ path-scurry@^1.11.1:
     lru-cache "^10.2.0"
     minipass "^5.0.0 || ^6.0.2 || ^7.0.0"
 
+payment@^2.3.0:
+  version "2.4.7"
+  resolved "https://registry.npmjs.org/payment/-/payment-2.4.7.tgz#fabefae499050f159e2a6837a58d30b78789f91c"
+  integrity sha512-5HyD3HJ0q3XtVm/Dss4t3KGtIughkCfnyQ1WfMashVD2vvBOmuXnkswhBcknMcHW8oo4zqVnNbQSkNaqafYaGA==
+  dependencies:
+    globalthis "^1.0.4"
+    qj "~2.0.0"
+
 picocolors@^1.0.0, picocolors@^1.1.1:
   version "1.1.1"
   resolved "https://registry.npmjs.org/picocolors/-/picocolors-1.1.1.tgz"
@@ -5961,6 +5979,11 @@ punycode@^2.1.0, punycode@^2.1.1:
   resolved "https://registry.npmjs.org/punycode/-/punycode-2.3.1.tgz"
   integrity sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==
 
+qj@~2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npmjs.org/qj/-/qj-2.0.0.tgz#054dd3b75ce018728d23a0605f030dfda0bd158a"
+  integrity sha512-8466vlnAF/piI42tzMBUfhaAWn2yBNPOLSSbA2YBlEh+S8CxBXbAO1AwuDReGKYX6LlsK19wBL9cpXZGlgsXxA==
+
 qrcode-terminal@0.11.0:
   version "0.11.0"
   resolved "https://registry.npmjs.org/qrcode-terminal/-/qrcode-terminal-0.11.0.tgz"
@@ -6002,6 +6025,15 @@ rc@~1.2.7:
     ini "~1.3.0"
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
+
+react-credit-cards-2@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.npmjs.org/react-credit-cards-2/-/react-credit-cards-2-1.0.3.tgz#d613bba8f8bea6b9b3c00758d0cf645b968fdb15"
+  integrity sha512-r4oi/92oUbDD7reCwOavjOZVJKpM941K3XYekUhVQysXEDxkzW8OGr0oD4Y5kYounJT2t75kbiEvERzRQS/shA==
+  dependencies:
+    credit-card-type "^9.1.0"
+    luhn "^2.4.1"
+    payment "^2.3.0"
 
 react-devtools-core@^6.1.1:
   version "6.1.5"
