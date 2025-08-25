@@ -38,6 +38,7 @@
     "expo-web-browser": "~14.2.0",
     "firebase": "^12.1.0",
     "react": "19.0.0",
+    "react-credit-cards-2": "^1.0.3",
     "react-dom": "19.0.0",
     "react-native": "0.79.6",
     "react-native-gesture-handler": "~2.24.0",
