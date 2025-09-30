@@ -29,10 +29,11 @@ Before you begin, ensure you have the following installed:
 - **Expo Go App** on your mobile device ([iOS](https://apps.apple.com/app/expo-go/id982107779) | [Android](https://play.google.com/store/apps/details?id=host.exp.exponent))
 
 ## Installation & Setup
+###1. Clone repository
 
 ```bash
 git clone https://github.com/TrynaGITEducated/super_duper_quickbite_dev
-cd quickbite_development
+cd suoer_duper_quickbite_dev
 yarn install/yarn [install dependancies]
 [if yarn is unavailable run npm install -g yarn in terminal to install]
 yarn start to run application
