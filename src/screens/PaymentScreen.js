@@ -18,7 +18,7 @@ export default function PaymentScreen({ route, navigation }) {
 
   const handlePayment = async () => {
     try {
-      const docRef = await addDoc(collection(db, "orders"), {
+      const docRef = await addDoc(collection(db, "order"), {
         items: cartItems,
         total,
         status: "pending",
