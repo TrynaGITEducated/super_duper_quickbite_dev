@@ -1,50 +1,39 @@
-# Welcome to quickbite_dev 👋
+# QuickBite Cafeteria System 🍽️
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A modern cafeteria management and ordering system built with React Native, Expo Go, and Firebase. Streamline your cafeteria operations with real-time ordering, inventory management, and seamless customer experience.
 
-## Get started
+## Features
 
-1. Install dependencies
+### 👥 Customer Features
+- 📱 **Mobile Menu** - Browse cafeteria items with images and descriptions
+- 🛒 **Cart System** - Add items to cart and customize orders
+- 💳 **Digital Payments** - Secure payment processing
+- 📊 **Order Tracking** - Real-time order status updates
+- ⭐ **Favorites** - Save frequently ordered items
+- 📱 **Expo Go Support** - Test easily with Expo Go app
 
-   ```bash
-   npm install
-   ```
+### 🏪 Admin Features
+- 📊 **Dashboard** - Real-time sales and order analytics
+- 📦 **Inventory Management** - Track and update item availability
+- 🍽️ **Menu Management** - Add, edit, or remove menu items
+- 📋 **Order Management** - Process and update order status
+- 👥 **User Management** - View customer information and order history
 
-2. Start the app
+## Prerequisites
 
-   ```bash
-   npx expo start
-   ```
+Before you begin, ensure you have the following installed:
 
-In the output, you'll find options to open the app in a
+- **Node.js** (version 16 or higher)
+- **Yarn** (version 1.22 or higher)
+- **Expo CLI** (`npm install -g expo-cli`)
+- **Expo Go App** on your mobile device ([iOS](https://apps.apple.com/app/expo-go/id982107779) | [Android](https://play.google.com/store/apps/details?id=host.exp.exponent))
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Installation & Setup
 
 ```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+git clone https://github.com/TrynaGITEducated/super_duper_quickbite_dev
+cd quickbite_development
+yarn install/yarn [install dependancies]
+[if yarn is unavailable run npm install -g yarn in terminal to install]
+yarn start to run application
+scan qr with expo go
