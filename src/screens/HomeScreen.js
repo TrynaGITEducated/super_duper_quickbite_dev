@@ -23,8 +23,13 @@ export default function HomeScreen({ navigation }) {
   };
 
   const navigateTo = (screenName) => {
-    navigation.navigate(screenName);
     setIsMenuOpen(false);
+    // Use different navigation for screens outside the tab navigator
+    if (screenName === "About") {
+      navigation.getParent()?.navigate(screenName);
+    } else {
+      navigation.navigate(screenName);
+    }
   };
 
   // Start animations when component mounts
@@ -75,10 +80,18 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* Header with Kebab Icon */}
+      {/* Header with Menu and Info Icons */}
       <View style={styles.header}>
         <TouchableOpacity onPress={toggleMenu}>
           <MaterialIcons name="menu" size={28} color="#000" />
+        </TouchableOpacity>
+        
+        {/* About Info Icon */}
+        <TouchableOpacity 
+          style={styles.aboutIconButton}
+          onPress={() => navigateTo("About")}
+        >
+          <MaterialIcons name="info-outline" size={28} color="#d4a056" />
         </TouchableOpacity>
       </View>
 
@@ -86,15 +99,23 @@ export default function HomeScreen({ navigation }) {
       {isMenuOpen && (
         <View style={styles.dropdownMenu}>
           <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo("Menu")}>
+            <MaterialIcons name="restaurant" size={20} color="#d4a056" style={styles.menuIcon} />
             <Text style={styles.menuText}>Menu</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo("Order")}>
+            <MaterialIcons name="assignment" size={20} color="#d4a056" style={styles.menuIcon} />
             <Text style={styles.menuText}>Order</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo("Profile")}>
+            <MaterialIcons name="person" size={20} color="#d4a056" style={styles.menuIcon} />
             <Text style={styles.menuText}>Profile</Text>
           </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo("About")}>
+            <MaterialIcons name="info" size={20} color="#d4a056" style={styles.menuIcon} />
+            <Text style={styles.menuText}>About QuickBite</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo("Login")}>
+            <MaterialIcons name="logout" size={20} color="#d4a056" style={styles.menuIcon} />
             <Text style={styles.menuText}>Logout</Text>
           </TouchableOpacity>
         </View>
@@ -248,36 +269,48 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    justifyContent: "flex-start",
+    justifyContent: "space-between",
     alignItems: "center",
     padding: 16,
     paddingTop: 0,
     paddingBottom: 10,
     zIndex: 1000,
   },
+  aboutIconButton: {
+    padding: 8,
+    borderRadius: 20,
+    backgroundColor: 'rgba(212, 160, 86, 0.1)',
+  },
   dropdownMenu: {
     position: "absolute",
     top: 80,
-    left: 0,
-    right: 0,
+    left: 10,
+    right: 10,
     backgroundColor: "#fff",
-    borderRadius: 8,
+    borderRadius: 12,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 8,
     zIndex: 1000,
+    paddingVertical: 8,
   },
   menuItem: {
-    paddingVertical: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 14,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: "#eee",
+    borderBottomColor: "#f5f5f5",
+  },
+  menuIcon: {
+    marginRight: 15,
   },
   menuText: {
     fontSize: 16,
-    color: "#000",
+    color: "#333",
+    fontWeight: '500',
   },
   foodCircleContainer: {
     position: 'absolute',
@@ -427,148 +460,3 @@ const styles = StyleSheet.create({
     right: -30,
   },
 });
-
-// // screens/HomeScreen.js
-// import React, { useState } from "react";
-// import {
-//   View,
-//   Text,
-//   Image,
-//   TouchableOpacity,
-//   StyleSheet,
-// } from "react-native";
-// import { MaterialIcons } from "@expo/vector-icons";
-
-// export default function HomeScreen({ navigation }) {
-//   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-//   const toggleMenu = () => {
-//     setIsMenuOpen(!isMenuOpen);
-//   };
-
-//   const navigateTo = (screenName) => {
-//     navigation.navigate(screenName);
-//     setIsMenuOpen(false);
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       {/* Header with Kebab Icon */}
-//       <View style={styles.header}>
-//         <TouchableOpacity onPress={toggleMenu}>
-//           <MaterialIcons name="menu" size={28} color="#000" />
-//         </TouchableOpacity>
-//       </View>
-
-//       {/* Dropdown Menu */}
-//       {isMenuOpen && (
-//         <View style={styles.dropdownMenu}>
-//           <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo("Menu")}>
-//             <Text style={styles.menuText}>Menu</Text>
-//           </TouchableOpacity>
-//           <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo("Order")}>
-//             <Text style={styles.menuText}>Order</Text>
-//           </TouchableOpacity>
-//           <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo("Profile")}>
-//             <Text style={styles.menuText}>Profile</Text>
-//           </TouchableOpacity>
-//           <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo("Login")}>
-//             <Text style={styles.menuText}>Logout</Text>
-//           </TouchableOpacity>
-//         </View>
-//       )}
-
-//       {/* Main Content */}
-//       <View style={styles.content}>
-//         <Image
-//           source={require("../../assets/images/quickbite-logo.png")}
-//           style={styles.logo}
-//           resizeMode="contain"
-//         />
-//         <Text style={styles.welcomeText}>Welcome to QuickBite Cafeteria</Text>
-//         <TouchableOpacity
-//           style={styles.orderButton}
-//           onPress={() => navigateTo("Menu")}
-//         >
-//           <Text style={styles.orderButtonText}>Order now →</Text>
-//         </TouchableOpacity>
-//       </View>
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#f5f0e6",
-//     paddingHorizontal: 6,
-//     paddingTop: 50,
-//     paddingBottom: 90,
-//   },
-//   header: {
-//     flexDirection: "row",
-//     justifyContent: "flex-start",
-//     alignItems: "center",
-//     padding: 16,
-//     paddingTop: 0,
-//     paddingBottom: 10,
-//   },
-//   dropdownMenu: {
-//     position: "absolute",
-//     top: 80,
-//     left: 0,
-//     right: 0,
-//     backgroundColor: "#fff",
-//     borderRadius: 8,
-//     shadowColor: "#000",
-//     shadowOffset: { width: 0, height: 2 },
-//     shadowOpacity: 0.3,
-//     shadowRadius: 4,
-//     elevation: 5,
-//     zIndex: 1000,
-//   },
-//   menuItem: {
-//     paddingVertical: 12,
-//     paddingHorizontal: 20,
-//     borderBottomWidth: 1,
-//     borderBottomColor: "#eee",
-//   },
-//   menuText: {
-//     fontSize: 16,
-//     color: "#000",
-//   },
-//   content: {
-//     flex: 1,
-//     alignItems: "center",
-//     justifyContent: "center",
-//     paddingHorizontal: 20,
-//     paddingTop: 20,
-//   },
-//   logo: {
-//     width: 200,
-//     height: 150,
-//     marginBottom: 30,
-//   },
-//   welcomeText: {
-//     fontSize: 24,
-//     fontWeight: "bold",
-//     textAlign: "center",
-//     color: "#000",
-//     marginBottom: 20,
-//   },
-//   orderButton: {
-//     backgroundColor: "#d4a056",
-//     paddingHorizontal: 40,
-//     paddingVertical: 12,
-//     borderRadius: 8,
-//     alignItems: "center",
-//     width: "100%",
-//     maxWidth: 200,
-//     marginBottom: -20,
-//   },
-//   orderButtonText: {
-//     color: "#fff",
-//     fontSize: 16,
-//     fontWeight: "bold",
-//   },
-// });
