@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // Customer Screens
+import AboutScreen from './src/screens/AboutScreen';
 import CartScreen from './src/screens/CartScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import LoginScreen from './src/screens/LoginScreen';
@@ -154,6 +155,22 @@ export default function App() {
         <Stack.Screen name="Payment" component={PaymentScreen} />
         <Stack.Screen name="TimeScheduler" component={TimeSchedulerScreen} />
         <Stack.Screen name="OrderStatus" component={OrderConfirmationScreen} />
+        
+        {/* About Screen */}
+        <Stack.Screen 
+          name="About" 
+          component={AboutScreen}
+          options={{ 
+            title: 'About QuickBite',
+            headerStyle: {
+              backgroundColor: '#1e90ff',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }} 
+        />
         
         {/* Kitchen Admin Flow */}
         <Stack.Screen name="Kitchen" component={KitchenTabs} options={{ headerShown: false }} />
