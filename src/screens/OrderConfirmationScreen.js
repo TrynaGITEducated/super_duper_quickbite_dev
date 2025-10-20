@@ -137,11 +137,13 @@ export default function OrderConfirmationScreen({ route, navigation }) {
           <Text style={styles.secondaryButtonText}>Start Fresh Order</Text>
         </TouchableOpacity>
 
-        <Button 
-          title="View Order Tracking" 
-          onPress={() => navigation.navigate("OrderTracking", { orderId })}
-          color="#666"
-        />
+       <TouchableOpacity 
+  style={styles.trackingButton}
+  onPress={() => navigation.navigate("OrderTracking", { orderId })}
+>
+  <Text style={styles.trackingButtonText}>Track My Order</Text>
+</TouchableOpacity>
+
       </View>
 
       <View style={styles.footer}>
@@ -333,4 +335,16 @@ const styles = StyleSheet.create({
     color: "red",
     marginBottom: 20,
   },
+  trackingButton: {
+  backgroundColor: '#2c5530',
+  padding: 15,
+  borderRadius: 8,
+  alignItems: 'center',
+  marginTop: 10,
+},
+trackingButtonText: {
+  color: '#fff',
+  fontSize: 16,
+  fontWeight: 'bold',
+},
 });

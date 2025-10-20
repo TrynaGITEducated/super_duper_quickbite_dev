@@ -134,7 +134,7 @@ export default function MenuScreen({ navigation }) {
               </View>
             </TouchableOpacity>
           ))}
-        </View>
+        </View> 
 
         {/* Today's Special Offers */}
         <View style={styles.section}>
