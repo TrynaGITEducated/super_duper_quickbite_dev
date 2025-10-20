@@ -4,17 +4,21 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // Customer Screens
-import AboutScreen from './src/screens/AboutScreen';
 import CartScreen from './src/screens/CartScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import MenuScreen from './src/screens/MenuScreen';
 import OrderConfirmationScreen from './src/screens/OrderConfirmationScreen';
+import OrderHistory from './src/screens/OrderHistory';
 import OrderScreen from './src/screens/OrderScreen';
+import PaymentOptions from './src/screens/PaymentOptions';
 import PaymentScreen from './src/screens/PaymentScreen';
+import PersonalDetails from './src/screens/PersonalDetails';
 import ProfileScreen from './src/screens/ProfileScreen';
+import RatingScreen from './src/screens/RatingScreen';
 import RegistrationScreen from './src/screens/RegistrationScreen';
 import TimeSchedulerScreen from './src/screens/TimeSchedulerScreen';
+import TrackOrder from './src/screens/TrackOrder';
 
 // Kitchen Admin Screens
 import InventoryManagementScreen from './src/screens/InventoryManagementScreen';
@@ -155,22 +159,11 @@ export default function App() {
         <Stack.Screen name="Payment" component={PaymentScreen} />
         <Stack.Screen name="TimeScheduler" component={TimeSchedulerScreen} />
         <Stack.Screen name="OrderStatus" component={OrderConfirmationScreen} />
-        
-        {/* About Screen */}
-        <Stack.Screen 
-          name="About" 
-          component={AboutScreen}
-          options={{ 
-            title: 'About QuickBite',
-            headerStyle: {
-              backgroundColor: '#1e90ff',
-            },
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-              fontWeight: 'bold',
-            },
-          }} 
-        />
+        <Stack.Screen name="PersonalDetails" component={PersonalDetails} />
+        <Stack.Screen name="PaymentOptions" component={PaymentOptions} />
+        <Stack.Screen name="OrderHistory" component={OrderHistory} />
+        <Stack.Screen name="TrackOrder" component={TrackOrder} />
+        <Stack.Screen name="RatingScreen" component={RatingScreen} />
         
         {/* Kitchen Admin Flow */}
         <Stack.Screen name="Kitchen" component={KitchenTabs} options={{ headerShown: false }} />
