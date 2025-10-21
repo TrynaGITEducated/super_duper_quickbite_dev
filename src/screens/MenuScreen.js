@@ -7,115 +7,208 @@ import {
   TouchableOpacity,
   StyleSheet,
   TextInput,
+  ScrollView,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 export default function MenuScreen({ navigation }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const navigateTo = (category) => {
-    // Navigate to OrderScreen and pass the selected category
+  const navigateToCategory = (category) => {
     navigation.navigate('Order', { category });
     setIsMenuOpen(false);
   };
 
-  // Mock data for "What you may like"
+  // Only these 5 categories in dropdown
+  const menuCategories = [
+    'Burgers',
+    'Drinks',
+    'Main meals',
+    'Fish & chips',
+    'Sandwiches',
+  ];
+
+  // Updated "What you may like" — all items exist in OrderScreen
   const popularItems = [
     {
       id: '1',
-      title: 'Beef & Rice Bowl',
-      description: 'A satisfying, homestyle favorite',
-      image: require('../../assets/images/beef-rice-bowl.png'),
+      title: 'Samp and Beef',
+      description: 'Hearty traditional stew with tender beef',
+      image: require('../../assets/images/samp-beef.png'),
+      category: 'Main meals',
     },
     {
       id: '2',
-      title: 'Fresh Bread & Coffee Bliss',
-      description: 'Perfectly baked goodness paired with rich coffee.',
-      image: require('../../assets/images/bread-coffee.png'),
+      title: 'Cheeseburger',
+      description: 'Juicy beef patty with melted cheese',
+      image: require('../../assets/images/cheeseburger.png'),
+      category: 'Burgers',
     },
     {
       id: '3',
-      title: 'Slushi',
+      title: 'Slush',
       description: 'Ice-cold, sweet, and refreshingly delicious',
       image: require('../../assets/images/slush.png'),
+      category: 'Drinks',
+    },
+    {
+      id: '4',
+      title: 'Kota',
+      description: 'South African street food classic',
+      image: require('../../assets/images/kota.png'),
+      category: 'Sandwiches',
+    },
+    {
+      id: '5',
+      title: 'Chips with Hake',
+      description: 'Crispy fish with golden chips',
+      image: require('../../assets/images/chips-hake.png'),
+      category: 'Fish & chips',
+    },
+    {
+      id: '6',
+      title: 'Chicken Curry',
+      description: 'Spiced curry with tender chicken pieces',
+      image: require('../../assets/images/chicken-curry.png'),
+      category: 'Main meals',
+    },
+    {
+      id: '7',
+      title: 'Coffee',
+      description: 'Rich and aromatic freshly brewed coffee',
+      image: require('../../assets/images/coffee.png'),
+      category: 'Drinks',
     },
   ];
 
-  // Mock data for "Today's Special Offers"
+  // Special offer data
   const specialOffer = {
-    id: 'special',
-    title: '10% Discount on Boerewors Meal',
-    description: 'You do not want to miss out. Place your order now!',
-    image: require('../../assets/images/boerewors.png'),
+    title: 'Special Combo Deal',
+    description: 'Get a burger, chips, and drink for only R99!',
+    image: require('../../assets/images/special-offer.png'),
+  };
+
+  // Full meal list for search
+  const allMeals = [
+    // Burgers
+    { title: 'Cheeseburger', category: 'Burgers' },
+    { title: 'Chicken Burger', category: 'Burgers' },
+    { title: 'Double Burger', category: 'Burgers' },
+    // Drinks
+    { title: 'Coke', category: 'Drinks' },
+    { title: 'Fanta', category: 'Drinks' },
+    { title: 'Water', category: 'Drinks' },
+    { title: 'Juice', category: 'Drinks' },
+    { title: 'Energy Drink', category: 'Drinks' },
+    { title: 'Slush', category: 'Drinks' },
+    { title: 'Coffee', category: 'Drinks' },
+    // Main meals
+    { title: 'Samp and Beef', category: 'Main meals' },
+    { title: 'Chicken Curry', category: 'Main meals' },
+    { title: 'Mogodu and Pap', category: 'Main meals' },
+    // Fish & chips
+    { title: 'Small chips', category: 'Fish & chips' },
+    { title: 'Large chips', category: 'Fish & chips' },
+    { title: 'Chips with Russian', category: 'Fish & chips' },
+    { title: 'Chips with Hake', category: 'Fish & chips' },
+    // Sandwiches
+    { title: 'Hot dog', category: 'Sandwiches' },
+    { title: 'Kota', category: 'Sandwiches' },
+    { title: 'Half bread', category: 'Sandwiches' },
+    { title: 'Bread', category: 'Sandwiches' },
+    { title: 'Sandwiches', category: 'Sandwiches' },
+    { title: 'Pie', category: 'Sandwiches' },
+  ];
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  };
+
+  const filteredItems = searchQuery
+    ? allMeals.filter((item) =>
+        item.title.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : [];
+
+  const clearSearch = () => {
+    setSearchQuery('');
+  };
+
+  const navigateToItem = (category, itemTitle) => {
+    navigation.navigate('Order', { 
+      category, 
+      targetItemTitle: itemTitle 
+    });
   };
 
   return (
     <View style={styles.container}>
       {/* Header with Kebab and Search Bar */}
       <View style={styles.header}>
-        {/* Kebab Menu Icon */}
         <TouchableOpacity onPress={toggleMenu}>
           <MaterialIcons name="menu" size={28} color="#000" />
         </TouchableOpacity>
 
-        {/* Search Bar */}
         <View style={styles.searchContainer}>
           <MaterialIcons name="search" size={20} color="#888" style={styles.searchIcon} />
           <TextInput
             style={styles.searchInput}
             placeholder="Search"
             placeholderTextColor="#888"
+            value={searchQuery}
+            onChangeText={handleSearch}
             autoCapitalize="none"
           />
+          {searchQuery ? (
+            <TouchableOpacity onPress={clearSearch}>
+              <MaterialIcons name="close" size={20} color="#888" />
+            </TouchableOpacity>
+          ) : null}
         </View>
       </View>
 
-      {/* Dropdown Menu */}
+      {/* Dropdown Menu — only 5 categories */}
       {isMenuOpen && (
         <View style={styles.dropdownMenu}>
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo('Special Offers')}>
-            <Text style={styles.menuText}>Special Offers</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo('Burgers')}>
-            <Text style={styles.menuText}>Burgers</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo('Pizza')}>
-            <Text style={styles.menuText}>Pizza</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo('Main Meals')}>
-            <Text style={styles.menuText}>Main Meals</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo('Sandwiches')}>
-            <Text style={styles.menuText}>Sandwiches</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo('Sushi')}>
-            <Text style={styles.menuText}>Sushi</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo('Fish & chips')}>
-            <Text style={styles.menuText}>Fish & chips</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo('Drinks')}>
-            <Text style={styles.menuText}>Drinks</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo('Desserts & Shakes')}>
-            <Text style={styles.menuText}>Desserts & Shakes</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo('Sides')}>
-            <Text style={styles.menuText}>Sides</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo('Salads')}>
-            <Text style={styles.menuText}>Salads</Text>
-          </TouchableOpacity>
+          {menuCategories.map((category) => (
+            <TouchableOpacity
+              key={category}
+              style={styles.menuItem}
+              onPress={() => navigateToCategory(category)}
+            >
+              <Text style={styles.menuText}>{category}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
       )}
 
-      {/* Main Content */}
-      <View style={styles.content}>
-        {/* Explore Our Menu */}
+      {/* Search Results */}
+      {searchQuery && (
+        <View style={styles.searchResults}>
+          {filteredItems.length > 0 ? (
+            filteredItems.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.searchResultItem}
+                onPress={() => navigateToItem(item.category, item.title)}
+              >
+                <Text style={styles.searchResultText}>{item.title}</Text>
+                <Text style={styles.searchResultCategory}>{item.category}</Text>
+              </TouchableOpacity>
+            ))
+          ) : (
+            <Text style={styles.noResultsText}>No items found</Text>
+          )}
+        </View>
+      )}
+
+      {/* 👇 Wrap content in ScrollView */}
+      <ScrollView contentContainerStyle={styles.scrollContent}>
         <Text style={styles.exploreText}>Explore our menu</Text>
 
         {/* What You May Like */}
@@ -125,7 +218,7 @@ export default function MenuScreen({ navigation }) {
             <TouchableOpacity
               key={item.id}
               style={styles.card}
-              onPress={() => navigateTo(item.title)}
+              onPress={() => navigateToItem(item.category, item.title)}
             >
               <Image source={item.image} style={styles.cardImage} />
               <View style={styles.cardContent}>
@@ -141,7 +234,7 @@ export default function MenuScreen({ navigation }) {
           <Text style={styles.sectionTitle}>Today's special offers</Text>
           <TouchableOpacity
             style={styles.specialCard}
-            onPress={() => navigateTo('Special Offers')}
+            onPress={() => navigateToItem('Special Offers', 'Special Combo Deal')}
           >
             <Image source={specialOffer.image} style={styles.specialImage} />
             <View style={styles.specialContent}>
@@ -150,7 +243,7 @@ export default function MenuScreen({ navigation }) {
             </View>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 }
@@ -216,15 +309,52 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#000',
   },
-  content: {
-    flex: 1,
-    marginTop: 20,
+  searchResults: {
+    position: 'absolute',
+    top: 70,
+    left: 16,
+    right: 16,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+    zIndex: 1000,
+    maxHeight: 200,
+  },
+  searchResultItem: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  searchResultText: {
+    fontSize: 16,
+    color: '#000',
+    fontWeight: '500',
+  },
+  searchResultCategory: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 2,
+  },
+  noResultsText: {
+    textAlign: 'center',
+    color: '#666',
+    paddingVertical: 16,
+    fontStyle: 'italic',
+  },
+  // 👇 New scroll container style
+  scrollContent: {
+    paddingBottom: 40, // Extra padding so last item isn't cut off
   },
   exploreText: {
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: 10,
     color: '#000',
   },
   section: {
@@ -271,7 +401,7 @@ const styles = StyleSheet.create({
   specialCard: {
     backgroundColor: '#fff',
     borderRadius: 8,
-    overflow: 'hidden',
+    padding: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -280,19 +410,21 @@ const styles = StyleSheet.create({
   },
   specialImage: {
     width: '100%',
-    height: 120,
+    height: 150,
+    borderRadius: 8,
+    marginBottom: 12,
   },
   specialContent: {
-    padding: 12,
+    paddingHorizontal: 8,
   },
   specialTitle: {
-    fontSize: 16,
-    fontWeight: '500',
+    fontSize: 18,
+    fontWeight: 'bold',
     color: '#000',
+    marginBottom: 4,
   },
   specialDescription: {
     fontSize: 14,
     color: '#666',
-    marginTop: 4,
   },
 });

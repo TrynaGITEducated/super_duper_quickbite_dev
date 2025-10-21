@@ -1,28 +1,97 @@
+// {
+//   "expo": {
+//     "name": "quickbite_dev",
+//     "slug": "quickbite_dev",
+//     "version": "1.0.0",
+//     "orientation": "portrait",
+//     "icon": "./assets/images/quickbite-logo.png",
+//     "scheme": "quickbitedev",
+//     "userInterfaceStyle": "automatic",
+//     "newArchEnabled": true,
+//     "ios": {
+//       "supportsTablet": true
+//     },
+//     "android": {
+//       "adaptiveIcon": {
+//         "foregroundImage": "./assets/images/adaptive-icon.png",
+//         "backgroundColor": "#ffffff"
+//       },
+//       "edgeToEdgeEnabled": true
+//     },
+//     "web": {
+//       "bundler": "metro",
+//       "output": "static",
+//       "favicon": "./assets/images/favicon.png"
+//     },
+//     "plugins": [
+//       "expo-router",
+//       [
+//         "expo-splash-screen",
+//         {
+//           "image": "./assets/images/splash-icon.png",
+//           "imageWidth": 200,
+//           "resizeMode": "contain",
+//           "backgroundColor": "#ffffff"
+//         }
+//       ]
+//     ],
+//     "experiments": {
+//       "typedRoutes": true
+//     }
+//   }
+// }
 {
   "expo": {
-    "name": "quickbite_dev",
-    "slug": "quickbite_dev",
+    "name": "QuickBite CPUT",
+    "slug": "quickbite-cput",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/quickbite-logo.png",
-    "scheme": "quickbitedev",
+    "scheme": "quickbite",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    
+    // iOS Configuration
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.cput.quickbite",
+      "infoPlist": {
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLName": "QuickBite CPUT",
+            "CFBundleURLSchemes": ["quickbite"]
+          }
+        ]
+      }
     },
+    
+    // Android Configuration
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.cput.quickbite",
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "quickbite"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
     },
+    
     "web": {
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
+    
     "plugins": [
       "expo-router",
       [
@@ -35,6 +104,7 @@
         }
       ]
     ],
+    
     "experiments": {
       "typedRoutes": true
     }
