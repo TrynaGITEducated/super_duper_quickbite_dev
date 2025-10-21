@@ -261,6 +261,7 @@ import MenuScreen from './src/screens/MenuScreen';
 import OrderConfirmationScreen from './src/screens/OrderConfirmationScreen';
 import OrderScreen from './src/screens/OrderScreen';
 import PaymentScreen from './src/screens/PaymentScreen';
+import PaymentMethodScreen from './src/screens/PaymentMethodScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import RegistrationScreen from './src/screens/RegistrationScreen';
 import TimeSchedulerScreen from './src/screens/TimeSchedulerScreen';
@@ -442,6 +443,7 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen name="Cart" component={CartScreen} />
+        <Stack.Screen name="PaymentMethod" component={PaymentMethodScreen} />
         <Stack.Screen name="Payment" component={PaymentScreen} />
         <Stack.Screen name="TimeScheduler" component={TimeSchedulerScreen} />
         <Stack.Screen name="OrderStatus" component={OrderConfirmationScreen} />

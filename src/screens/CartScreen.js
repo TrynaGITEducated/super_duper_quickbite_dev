@@ -1,3 +1,4 @@
+// src/screens/CartScreen.js
 import { useEffect, useState } from "react";
 import {
   FlatList,
@@ -6,7 +7,6 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Button,
 } from "react-native";
 
 export default function CartScreen({ route, navigation }) {
@@ -121,7 +121,7 @@ export default function CartScreen({ route, navigation }) {
             <TouchableOpacity
               style={styles.primaryButton}
               onPress={() =>
-                navigation.navigate("Payment", { cartItems, total })
+                navigation.navigate("PaymentMethod", { cartItems, total }) // ← CHANGED FROM "Payment" TO "PaymentMethod"
               }
             >
               <Text style={styles.primaryButtonText}>Proceed to Payment</Text>
