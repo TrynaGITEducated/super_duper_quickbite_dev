@@ -1,8 +1,10 @@
+// screens/HomeScreen.js
 import { MaterialIcons } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
 import {
   Animated,
   Easing,
+  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -24,7 +26,6 @@ export default function HomeScreen({ navigation }) {
 
   const navigateTo = (screenName) => {
     setIsMenuOpen(false);
-    // Use different navigation for screens outside the tab navigator
     if (screenName === "About") {
       navigation.getParent()?.navigate(screenName);
     } else {
@@ -32,9 +33,7 @@ export default function HomeScreen({ navigation }) {
     }
   };
 
-  // Start animations when component mounts
   useEffect(() => {
-    // Rotating food animation
     Animated.loop(
       Animated.timing(rotateAnim, {
         toValue: 1,
@@ -44,7 +43,6 @@ export default function HomeScreen({ navigation }) {
       })
     ).start();
 
-    // Fade in and slide up animation for welcome content
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -64,29 +62,27 @@ export default function HomeScreen({ navigation }) {
     ]).start();
   }, []);
 
-  // Interpolate rotation
   const rotateInterpolate = rotateAnim.interpolate({
     inputRange: [0, 1],
     outputRange: ['0deg', '360deg']
   });
 
-  // Food items for rotation
+  // Added 5th item (Sandwiches)
   const foodItems = [
-    { id: 1, source: require("../../assets/images/burger.png"), style: styles.foodItem1 },
-    { id: 2, source: require("../../assets/images/coffee.png"), style: styles.foodItem2 },
-    { id: 3, source: require("../../assets/images/fishchips.png"), style: styles.foodItem3 },
-    { id: 4, source: require("../../assets/images/pie.png"), style: styles.foodItem4 },
+    { id: 1, source: require("../../assets/images/burger.png") },
+    { id: 2, source: require("../../assets/images/coffee.png") },
+    { id: 3, source: require("../../assets/images/fishchips.png") },
+    { id: 4, source: require("../../assets/images/pie.png") },
+    { id: 5, source: require("../../assets/images/sandwich.png") }, // New item
   ];
 
   return (
     <View style={styles.container}>
-      {/* Header with Menu and Info Icons */}
       <View style={styles.header}>
         <TouchableOpacity onPress={toggleMenu}>
           <MaterialIcons name="menu" size={28} color="#000" />
         </TouchableOpacity>
         
-        {/* About Info Icon */}
         <TouchableOpacity 
           style={styles.aboutIconButton}
           onPress={() => navigateTo("About")}
@@ -95,7 +91,6 @@ export default function HomeScreen({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      {/* Dropdown Menu */}
       {isMenuOpen && (
         <View style={styles.dropdownMenu}>
           <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo("Menu")}>
@@ -131,22 +126,36 @@ export default function HomeScreen({ navigation }) {
             }
           ]}
         >
-          {foodItems.map((item) => (
-            <Animated.Image
-              key={item.id}
-              source={item.source}
-              style={[
-                item.style,
-                {
-                  transform: [{ rotate: rotateInterpolate }]
-                }
-              ]}
-              resizeMode="contain"
-            />
-          ))}
+          {foodItems.map((item, index) => {
+            // 5 items: 72° apart (360/5)
+            const angle = (index * 2 * Math.PI) / 5;
+            const radius = 90; // Reduced from 120 → closer to logo
+            const x = radius * Math.cos(angle);
+            const y = radius * Math.sin(angle);
+            
+            return (
+              <View
+                key={item.id}
+                style={[
+                  styles.foodOrb,
+                  {
+                    transform: [
+                      { translateX: x },
+                      { translateY: y }
+                    ]
+                  }
+                ]}
+              >
+                <Image
+                  source={item.source}
+                  style={styles.foodImage}
+                  resizeMode="contain"
+                />
+              </View>
+            );
+          })}
         </Animated.View>
         
-        {/* Central Logo */}
         <Animated.Image
           source={require("../../assets/images/quickbite-logo.png")}
           style={[
@@ -162,7 +171,6 @@ export default function HomeScreen({ navigation }) {
         />
       </View>
 
-      {/* Main Content */}
       <Animated.View 
         style={[
           styles.content,
@@ -178,42 +186,6 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.welcomeText}>Welcome to QuickBite Cafeteria</Text>
         <Text style={styles.subtitle}>Fresh Food, Fast Delivery</Text>
         
-        {/* Floating food items */}
-        <View style={styles.floatingFoods}>
-          <Animated.Image
-            source={require("../../assets/images/coffee.png")}
-            style={[
-              styles.floatingFood1,
-              {
-                transform: [
-                  {
-                    translateY: fadeAnim.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [0, -20]
-                    })
-                  }
-                ]
-              }
-            ]}
-          />
-          <Animated.Image
-            source={require("../../assets/images/mainmeal.png")}
-            style={[
-              styles.floatingFood2,
-              {
-                transform: [
-                  {
-                    translateY: fadeAnim.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [0, 15]
-                    })
-                  }
-                ]
-              }
-            ]}
-          />
-        </View>
-
         <TouchableOpacity
           style={styles.orderButton}
           onPress={() => navigateTo("Menu")}
@@ -222,7 +194,6 @@ export default function HomeScreen({ navigation }) {
         </TouchableOpacity>
       </Animated.View>
 
-      {/* Animated background elements */}
       <View style={styles.backgroundElements}>
         <Animated.View 
           style={[
@@ -314,72 +285,70 @@ const styles = StyleSheet.create({
   },
   foodCircleContainer: {
     position: 'absolute',
-    top: '20%',
+    top: '20%', // Slightly lower to balance content
     left: 0,
     right: 0,
     alignItems: 'center',
     justifyContent: 'center',
-    height: 300,
+    height: 260, // Reduced from 300
   },
   foodCircle: {
-    width: 250,
-    height: 250,
-    borderRadius: 125,
+    width: 260, // Reduced from 320
+    height: 260,
+    borderRadius: 10,
     position: 'relative',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  centralLogo: {
+  foodOrb: {
     position: 'absolute',
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    width: 60, // Slightly smaller
+    height: 60,
+    borderRadius: 32.5,
     backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
+    shadowRadius: 4,
+    elevation: 3,
   },
-  foodItem1: {
-    position: 'absolute',
-    width: 70,
-    height: 70,
-    top: 10,
-    left: 90,
+  foodImage: {
+    width: 48, // Slightly smaller
+    height: 48,
   },
-  foodItem2: {
+  // centralLogo: {
+  //   position: 'absolute',
+  //   width: 120, // Slightly smaller
+  //   height: 120,
+  //   borderRadius: 60,
+  //   backgroundColor: '#fff',
+  //   shadowColor: '#000',
+  //   shadowOffset: { width: 0, height: 4 },
+  //   shadowOpacity: 0.1,
+  //   shadowRadius: 8,
+  //   elevation: 5,
+  // },
+   centralLogo: {
     position: 'absolute',
-    width: 70,
-    height: 70,
-    top: 90,
-    left: 160,
-  },
-  foodItem3: {
-    position: 'absolute',
-    width: 70,
-    height: 70,
-    top: 170,
-    left: 90,
-  },
-  foodItem4: {
-    position: 'absolute',
-    width: 70,
-    height: 70,
-    top: 90,
-    left: 20,
+    width: 150,
+    height: 150,
+    // marginBottom: 30,
   },
   content: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "flex-end",
+    justifyContent: "flex-end", // Changed from "flex-end" to center vertically
     paddingHorizontal: 20,
-    paddingBottom: 60,
+    paddingBottom: 200, // Reduced padding
   },
   welcomeText: {
-    fontSize: 28,
+    fontSize: 26, // Slightly smaller
     fontWeight: "bold",
     textAlign: "center",
     color: "#000",
-    marginBottom: 10,
+    marginBottom: 12,
     textShadowColor: 'rgba(0, 0, 0, 0.1)',
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 5,
@@ -388,37 +357,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#666",
     textAlign: "center",
-    marginBottom: 30,
+    marginBottom: 25, // Reduced margin
     fontWeight: '500',
-  },
-  floatingFoods: {
-    position: 'relative',
-    width: '100%',
-    height: 80,
-    marginBottom: 30,
-  },
-  floatingFood1: {
-    position: 'absolute',
-    width: 50,
-    height: 50,
-    left: 30,
-    top: 0,
-  },
-  floatingFood2: {
-    position: 'absolute',
-    width: 45,
-    height: 45,
-    right: 40,
-    top: 20,
   },
   orderButton: {
     backgroundColor: "#d4a056",
-    paddingHorizontal: 40,
-    paddingVertical: 16,
+    paddingHorizontal: 35,
+    paddingVertical: 14,
     borderRadius: 25,
     alignItems: "center",
     width: "100%",
-    maxWidth: 200,
+    maxWidth: 190,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
@@ -427,7 +376,7 @@ const styles = StyleSheet.create({
   },
   orderButtonText: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: "bold",
     textShadowColor: 'rgba(0, 0, 0, 0.2)',
     textShadowOffset: { width: 1, height: 1 },
