@@ -253,18 +253,17 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 // Customer Screens
-import AboutScreen from "./src/screens/AboutScreen";
-import CartScreen from "./src/screens/CartScreen";
-import EmailVerificationScreen from "./src/screens/EmailVerificationScreen";
-import HomeScreen from "./src/screens/HomeScreen";
-import LoginScreen from "./src/screens/LoginScreen";
-import MenuScreen from "./src/screens/MenuScreen";
-import OrderConfirmationScreen from "./src/screens/OrderConfirmationScreen";
-import OrderScreen from "./src/screens/OrderScreen";
-import PaymentScreen from "./src/screens/PaymentScreen";
-import ProfileScreen from "./src/screens/ProfileScreen";
-import RegistrationScreen from "./src/screens/RegistrationScreen";
-import TimeSchedulerScreen from "./src/screens/TimeSchedulerScreen";
+import AboutScreen from './src/screens/AboutScreen';
+import CartScreen from './src/screens/CartScreen';
+import HomeScreen from './src/screens/HomeScreen';
+import LoginScreen from './src/screens/LoginScreen';
+import MenuScreen from './src/screens/MenuScreen';
+import OrderConfirmationScreen from './src/screens/OrderConfirmationScreen';
+import OrderScreen from './src/screens/OrderScreen';
+import PaymentScreen from './src/screens/PaymentScreen';
+import ProfileScreen from './src/screens/ProfileScreen';
+import RegistrationScreen from './src/screens/RegistrationScreen';
+import TimeSchedulerScreen from './src/screens/TimeSchedulerScreen';
 
 // Kitchen Admin Screens
 import InventoryManagementScreen from "./src/screens/InventoryManagementScreen";
@@ -446,24 +445,23 @@ export default function App() {
         <Stack.Screen name="Payment" component={PaymentScreen} />
         <Stack.Screen name="TimeScheduler" component={TimeSchedulerScreen} />
         <Stack.Screen name="OrderStatus" component={OrderConfirmationScreen} />
-        <Stack.Screen name="OrderTracking" component={OrderTrackingScreen} />
-
+        
         {/* About Screen */}
-        <Stack.Screen
-          name="About"
+        <Stack.Screen 
+          name="About" 
           component={AboutScreen}
-          options={{
-            title: "About QuickBite",
+          options={{ 
+            title: 'About QuickBite',
             headerStyle: {
-              backgroundColor: "#1e90ff",
+              backgroundColor: '#1e90ff',
             },
-            headerTintColor: "#fff",
+            headerTintColor: '#fff',
             headerTitleStyle: {
-              fontWeight: "bold",
+              fontWeight: 'bold',
             },
-          }}
+          }} 
         />
-
+        
         {/* Kitchen Admin Flow */}
         <Stack.Screen
           name="Kitchen"
