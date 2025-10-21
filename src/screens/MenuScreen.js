@@ -7,8 +7,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   TextInput,
-  FlatList,
-  ScrollView, // 👈 Added
+  ScrollView,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -86,6 +85,13 @@ export default function MenuScreen({ navigation }) {
       category: 'Drinks',
     },
   ];
+
+  // Special offer data
+  const specialOffer = {
+    title: 'Special Combo Deal',
+    description: 'Get a burger, chips, and drink for only R99!',
+    image: require('../../assets/images/special-offer.png'),
+  };
 
   // Full meal list for search
   const allMeals = [
@@ -181,6 +187,26 @@ export default function MenuScreen({ navigation }) {
         </View>
       )}
 
+      {/* Search Results */}
+      {searchQuery && (
+        <View style={styles.searchResults}>
+          {filteredItems.length > 0 ? (
+            filteredItems.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.searchResultItem}
+                onPress={() => navigateToItem(item.category, item.title)}
+              >
+                <Text style={styles.searchResultText}>{item.title}</Text>
+                <Text style={styles.searchResultCategory}>{item.category}</Text>
+              </TouchableOpacity>
+            ))
+          ) : (
+            <Text style={styles.noResultsText}>No items found</Text>
+          )}
+        </View>
+      )}
+
       {/* 👇 Wrap content in ScrollView */}
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <Text style={styles.exploreText}>Explore our menu</Text>
@@ -192,7 +218,7 @@ export default function MenuScreen({ navigation }) {
             <TouchableOpacity
               key={item.id}
               style={styles.card}
-              onPress={() => navigateTo(item.title)}
+              onPress={() => navigateToItem(item.category, item.title)}
             >
               <Image source={item.image} style={styles.cardImage} />
               <View style={styles.cardContent}>
@@ -208,7 +234,7 @@ export default function MenuScreen({ navigation }) {
           <Text style={styles.sectionTitle}>Today's special offers</Text>
           <TouchableOpacity
             style={styles.specialCard}
-            onPress={() => navigateTo('Special Offers')}
+            onPress={() => navigateToItem('Special Offers', 'Special Combo Deal')}
           >
             <Image source={specialOffer.image} style={styles.specialImage} />
             <View style={styles.specialContent}>
@@ -217,7 +243,7 @@ export default function MenuScreen({ navigation }) {
             </View>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 }
@@ -283,6 +309,43 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#000',
   },
+  searchResults: {
+    position: 'absolute',
+    top: 70,
+    left: 16,
+    right: 16,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+    zIndex: 1000,
+    maxHeight: 200,
+  },
+  searchResultItem: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  searchResultText: {
+    fontSize: 16,
+    color: '#000',
+    fontWeight: '500',
+  },
+  searchResultCategory: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 2,
+  },
+  noResultsText: {
+    textAlign: 'center',
+    color: '#666',
+    paddingVertical: 16,
+    fontStyle: 'italic',
+  },
   // 👇 New scroll container style
   scrollContent: {
     paddingBottom: 40, // Extra padding so last item isn't cut off
@@ -293,14 +356,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 10,
     color: '#000',
-  },
-  catchyText: {
-    fontSize: 14,
-    textAlign: 'center',
-    marginBottom: 20,
-    color: '#555',
-    paddingHorizontal: 20,
-    lineHeight: 20,
   },
   section: {
     marginBottom: 20,
@@ -343,25 +398,33 @@ const styles = StyleSheet.create({
     color: '#666',
     marginTop: 4,
   },
-  searchResultItem: {
+  specialCard: {
     backgroundColor: '#fff',
-    padding: 14,
-    marginVertical: 4,
     borderRadius: 8,
+    padding: 12,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 1,
+    shadowRadius: 4,
+    elevation: 2,
   },
-  searchResultText: {
-    fontSize: 16,
+  specialImage: {
+    width: '100%',
+    height: 150,
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  specialContent: {
+    paddingHorizontal: 8,
+  },
+  specialTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
     color: '#000',
+    marginBottom: 4,
   },
-  noResultsText: {
-    textAlign: 'center',
+  specialDescription: {
+    fontSize: 14,
     color: '#666',
-    marginTop: 20,
-    fontStyle: 'italic',
   },
 });

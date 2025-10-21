@@ -266,11 +266,11 @@ import RegistrationScreen from './src/screens/RegistrationScreen';
 import TimeSchedulerScreen from './src/screens/TimeSchedulerScreen';
 
 // Kitchen Admin Screens
+import EmailVerificationScreen from "./src/screens/EmailVerificationScreen";
 import InventoryManagementScreen from "./src/screens/InventoryManagementScreen";
 import KitchenAnalyticsScreen from "./src/screens/KitchenAnalyticsScreen";
 import KitchenDashboard from "./src/screens/KitchenDashboard";
 import KitchenOrderScreen from "./src/screens/KitchenOrderScreen";
-import OrderTrackingScreen from "./src/screens/OrderTrackingScreen";
 import StaffLoginScreen from "./src/screens/StaffLoginScreen";
 import StaffRegistrationScreen from "./src/screens/StaffRegistrationScreen";
 
